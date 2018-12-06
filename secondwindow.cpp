@@ -15,6 +15,7 @@ SecondWindow::~SecondWindow()
 
 void SecondWindow::on_SPushButton_abort_clicked()
 {
+
     QWidget::close();
 }
 

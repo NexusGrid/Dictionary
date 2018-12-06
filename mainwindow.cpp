@@ -8,7 +8,6 @@
 #include <QDebug>
 #include <QFileDialog>
 
-
 QMap<QString, QString> map;
 
 
@@ -28,6 +27,17 @@ void MainWindow::on_action_import_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "/dictionary", tr("Text file (*.txt)"));
     QFile file(fileName);
+    if (file.open(QIODevice::ReadOnly)){
+        while(!file.atEnd())
+                {
+                    QString str = file.readLine();
+                    QStringList lst = str.split("|");
+                    map[lst.at(0)] = lst.at(1);
+                }
+
+
+    }
+
 }
 
 void MainWindow::on_action_quit_triggered()
@@ -94,11 +104,13 @@ void MainWindow::on_pushButton_delete_clicked()
 void MainWindow::on_pushButton_readd_clicked()
 {
     QString key = ui->input->text();
+
     QMap<QString, QString>::const_iterator iter = map.find(key);
     if(iter != map.end()){
         SecondWindow window2;
+        window2.value = map[key];
         window2.setModal(true);
-        window2.exec();
+        window2.exec(); 
         QString value = window2.value;
         map.insert(key,value);
         ui->output->setText(tr("Слово перезаписано!"));
