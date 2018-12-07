@@ -28,14 +28,21 @@ void MainWindow::on_action_import_triggered()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "/dictionary", tr("Text file (*.txt)"));
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly)){
+        QStringList lst;
         while(!file.atEnd())
-                {
-                    QTextStream stream(&file);
-                    QString str =stream.readLine();
-                    QStringList lst = str.split("|");
-                    map[lst.at(0)] = lst.at(1);
-                }
-
+        {
+            QString str = file.readLine();
+                    if(!str.contains('$')){
+                        lst << str;
+                    }else{
+                        lst << str;
+                        str = lst.join("");
+                        str.chop(3);
+                        lst = str.split("|");
+                        map[lst.at(0)] = lst.at(1);
+                        lst.clear();
+                    }
+          }
 
     }
 
@@ -60,10 +67,10 @@ void MainWindow::on_action_export_triggered()
         foreach(QString key, map.keys()){
             QString value = map.value(key);
             stream << key << "|" << value;
-            stream <<"\r\n";
+            stream <<"$\r\n";
         }
     }
-    ui->output->setText(tr("Словарь экспортирова!"));
+    ui->output->setText(tr("Словарь экспортирован!"));
 
 }
 
