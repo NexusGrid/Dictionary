@@ -30,7 +30,8 @@ void MainWindow::on_action_import_triggered()
     if (file.open(QIODevice::ReadOnly)){
         while(!file.atEnd())
                 {
-                    QString str = file.readLine();
+                    QTextStream stream(&file);
+                    QString str =stream.readLine();
                     QStringList lst = str.split("|");
                     map[lst.at(0)] = lst.at(1);
                 }
