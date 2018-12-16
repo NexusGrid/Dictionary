@@ -30,12 +30,12 @@ void MainWindow::on_action_import_triggered()
         while(!file.atEnd())
         {
             QString str = file.readLine();
-                    if(!str.contains("$endl\r\n")){
+					if(!str.contains("\r\n")){
                         lst << str;
                     }else{
                         lst << str;
                         str = lst.join("");
-                        str.chop(7);
+						str.chop(2);
                         lst = str.split("|");
                         map[lst.at(0)] = lst.at(1);
                         lst.clear();
@@ -66,7 +66,7 @@ void MainWindow::on_action_export_triggered()
         foreach(QString key, map.keys()){
             QString value = map.value(key);
 			stream << key << "|" << value;
-            stream <<"$endl\r\n";
+			stream <<"\r\n";
         }
     }
     ui->output->setText(tr("Словарь экспортирован!"));
@@ -84,9 +84,9 @@ void MainWindow::on_pushButton_add_clicked()
         window2.exec();
         QString value = window2.value;
         map.insert(key,value);
-        ui->output->setText(tr("Слово добавлено!"));
+		ui->output->setText(tr("Добавлено!"));
     }
-    else{ QMessageBox::critical(this,tr("Ошибка"),tr("Слово уже добавлено!"));}
+	else{ QMessageBox::critical(this,tr("Ошибка"),tr("Уже добавлено!"));}
 
 }
 
@@ -97,14 +97,14 @@ void MainWindow::on_pushButton_search_clicked()
      if(iter != map.end()){
 	 ui->output->setText(map.value(key));
      }
-     else{ QMessageBox::critical(this,tr("Ошибка"),tr("Слово не найдено!"));}
+	 else{ QMessageBox::critical(this,tr("Ошибка"),tr("Не найдено!"));}
 }
 
 void MainWindow::on_pushButton_delete_clicked()
 {
     QString key = ui->input->text();
     map.remove(key);
-    ui->output->setText(tr("Слово удалено!"));
+	ui->output->setText(tr("Удалено!"));
 }
 
 
@@ -120,9 +120,9 @@ void MainWindow::on_pushButton_readd_clicked()
         window2.exec(); 
         QString value = window2.value;
         map.insert(key,value);
-		ui->output->setText(tr("Слово перезаписано!"));
+		ui->output->setText(tr("Перезаписано!"));
     }
-    else{ QMessageBox::critical(this,tr("Ошибка"),tr("Слово не найдено!"));}
+	else{ QMessageBox::critical(this,tr("Ошибка"),tr("Не найдено!"));}
 }
 
 
